@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import Twitter = require('twitter');
 import {
@@ -24,15 +24,27 @@ export class TwitterService {
     ) as CollectionReference<Tweet>;
   }
 
-  async postTweet(message: string): Promise<string> {
+  private readonly logger = new Logger(TwitterService.name);
+
+  async postTweet(message: string, url?: string, trim = true): Promise<string> {
     try {
+      const messageCount = message.length + url?.length;
+      if (messageCount > 280) {
+        if (trim) {
+          const toTrim = (messageCount - 276) * -1; //3 is for 3 dots
+          message = message.slice(0, toTrim);
+          message = message + '...';
+        } else {
+          return Promise.reject('Message is too long');
+        }
+      }
       const tweet = await this.client.post('statuses/update', {
-        status: message,
+        status: message + '\n' + url,
       });
       const firebaseData = await this.storeTweetData(tweet as Tweet);
       return Promise.resolve(firebaseData);
     } catch (e) {
-      console.log('It failed!', e);
+      this.logger.debug(`Error posting tweet ${JSON.stringify(e)}`);
       return Promise.reject(e);
     }
   }

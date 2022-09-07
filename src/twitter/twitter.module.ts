@@ -4,11 +4,6 @@ import { TwitterController } from './twitter.controller';
 import { FirebaseModule } from '@nicholas.braun/nestjs-firebase';
 
 @Module({
-  imports: [
-    FirebaseModule.forRoot({
-      googleApplicationCredential: './firebase.json',
-    }),
-  ],
   controllers: [TwitterController],
   providers: [TwitterService],
 })

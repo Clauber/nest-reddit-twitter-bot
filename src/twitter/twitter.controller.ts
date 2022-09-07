@@ -6,7 +6,7 @@ export class TwitterController {
   constructor(private readonly twitterService: TwitterService) {}
 
   @Post()
-  async create(@Body() body: { message: string }) {
-    return await this.twitterService.postTweet(body.message);
+  async create(@Body() body: { message: string; url: string }) {
+    return await this.twitterService.postTweet(body.message, body.url);
   }
 }
