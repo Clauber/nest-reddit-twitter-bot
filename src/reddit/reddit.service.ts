@@ -7,7 +7,6 @@ import {
 import axios from 'axios';
 
 const API_ENDPOINT_PATTERN = 'https://www.reddit.com/r/$1/new.json';
-const PERMALINK_BASE = 'https://www.reddit.com';
 
 @Injectable()
 export class RedditService {

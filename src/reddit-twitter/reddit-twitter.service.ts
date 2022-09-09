@@ -52,6 +52,10 @@ export class RedditTwitterService {
     tweetId: string;
     redditId: string;
   }) {
-    return await this.collection.add(item);
+    try {
+      return await this.collection.add(item);
+    } catch (e) {
+      console.log('Issues saving relation', e);
+    }
   }
 }
